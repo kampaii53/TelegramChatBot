@@ -7,6 +7,10 @@
           <element id="module-output" name="app" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-slf4j-impl:2.7" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.21" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-api:2.7" />
+          <element id="library" level="project" name="Maven: org.apache.logging.log4j:log4j-core:2.7" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:5.2.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.0.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:5.2.0.RELEASE" />
@@ -69,7 +73,6 @@
           <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpmime:4.5.10" />
           <element id="library" level="project" name="Maven: commons-io:commons-io:2.6" />
           <element id="library" level="project" name="Maven: org.telegram:telegrambotsextensions:4.9.1" />
-          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.26" />
         </element>
       </element>
       <element id="directory" name="META-INF">
