@@ -20,4 +20,5 @@ public class StartCommand extends AbstractCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         sendMessage(absSender,chat.getId(),"Приложение запущено");
     }
+
 }
