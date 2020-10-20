@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(){
         this.users = new HashMap<>();
-        users.put(1,"Test");
+        users.put(699917602,"Kirill Kuznetsov");
     }
 
     @Override
