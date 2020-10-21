@@ -2,7 +2,7 @@ package ru.kampaii.telegram.services;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kampaii.telegram.exceptions.ChatBotException;
-import ru.kampaii.telegram.utils.callback.CallbackExecutor;
+import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
 
 public interface CallbackService {
 

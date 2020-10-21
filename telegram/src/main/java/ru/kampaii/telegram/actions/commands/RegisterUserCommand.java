@@ -1,4 +1,4 @@
-package ru.kampaii.telegram.commands;
+package ru.kampaii.telegram.actions.commands;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.kampaii.telegram.services.CallbackService;
 import ru.kampaii.telegram.services.UserService;
-import ru.kampaii.telegram.utils.callback.impl.RegisterAdministratorCallback;
+import ru.kampaii.telegram.actions.callbacks.impl.RegisterAdministratorCallback;
 
 @Component
 public class RegisterUserCommand extends AbstractCommand {

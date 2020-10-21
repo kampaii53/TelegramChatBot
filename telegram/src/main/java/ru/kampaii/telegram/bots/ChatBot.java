@@ -3,19 +3,20 @@ package ru.kampaii.telegram.bots;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.kampaii.telegram.commands.AbstractCommand;
-import ru.kampaii.telegram.exceptions.CallbackNotFoundException;
-import ru.kampaii.telegram.exceptions.ChatBotException;
+import ru.kampaii.telegram.actions.commands.AbstractCommand;
+import ru.kampaii.telegram.actions.updates.NonCommandUpdateExecutor;
 import ru.kampaii.telegram.services.CallbackService;
 import ru.kampaii.telegram.services.UserService;
 
 import java.util.List;
 
+@Component
 public class ChatBot extends TelegramLongPollingCommandBot {
 
     private static final Logger log = LoggerFactory.getLogger(ChatBot.class);
@@ -25,11 +26,13 @@ public class ChatBot extends TelegramLongPollingCommandBot {
 
     private final CallbackService callbackService;
     private final UserService userService;
+    private final List<NonCommandUpdateExecutor> nonCommandUpdateExecutors;
 
-    public ChatBot(DefaultBotOptions botOptions, List<AbstractCommand> commands, CallbackService callbackService, UserService userService) {
+    public ChatBot(DefaultBotOptions botOptions, List<AbstractCommand> commands, CallbackService callbackService, UserService userService, List<NonCommandUpdateExecutor> nonCommandUpdateExecutors) {
         super(botOptions);
         this.callbackService = callbackService;
         this.userService = userService;
+        this.nonCommandUpdateExecutors = nonCommandUpdateExecutors;
 
         for (AbstractCommand command : commands) {
             this.register(command);
@@ -61,17 +64,15 @@ public class ChatBot extends TelegramLongPollingCommandBot {
             return;
         }
 
-        try {
-            callbackService.executeCallback(update.getMessage().getReplyToMessage().getMessageId(),update);
-        } catch (CallbackNotFoundException ex){
-            sendMessageToChat(update.getMessage().getChatId(),"Не найдено обработчика ответа для вашего сообщения");
-        } catch (ChatBotException | NullPointerException e) {
-            log.error("Произошло исключение при запуске колбэка",e);
-            sendMessageToChat(update.getMessage().getChatId(),"Произошло непредвиденное исключение");
+        for (NonCommandUpdateExecutor executor : nonCommandUpdateExecutors) {
+            if(executor.applies(update,this)){
+                executor.execute(update,this);
+            }
         }
+
     }
 
-    private void sendMessageToChat(Long chatId,String message){
+    public void sendMessageToChat(Long chatId,String message){
         try {
             execute(new SendMessage(chatId,message));
         } catch (TelegramApiException e) {

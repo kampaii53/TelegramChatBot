@@ -10,8 +10,9 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import ru.kampaii.telegram.actions.commands.AbstractCommand;
+import ru.kampaii.telegram.actions.updates.NonCommandUpdateExecutor;
 import ru.kampaii.telegram.bots.ChatBot;
-import ru.kampaii.telegram.commands.AbstractCommand;
 import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.services.CallbackService;
 import ru.kampaii.telegram.services.UserService;
@@ -26,13 +27,13 @@ public class TelegramWorkerImpl implements TelegramWorker {
 
     ChatBot bot;
 
-    public TelegramWorkerImpl(List<AbstractCommand> commandList, CallbackService callbackService, UserService userService) throws TelegramApiRequestException {
+    public TelegramWorkerImpl(List<AbstractCommand> commandList, CallbackService callbackService, UserService userService, List<NonCommandUpdateExecutor> nonCommandUpdateExecutors) throws TelegramApiRequestException {
         log.info("Стартую TelegramWorker");
         ApiContextInitializer.init();
 
         TelegramBotsApi botsApi = new TelegramBotsApi();
         DefaultBotOptions botOptions = ApiContext.getInstance(DefaultBotOptions.class);
-        ChatBot bot = new ChatBot(botOptions,commandList,callbackService, userService);
+        ChatBot bot = new ChatBot(botOptions,commandList,callbackService, userService, nonCommandUpdateExecutors);
         botsApi.registerBot(bot);
         this.bot = bot;
         log.info("TelegramWorker запущен");

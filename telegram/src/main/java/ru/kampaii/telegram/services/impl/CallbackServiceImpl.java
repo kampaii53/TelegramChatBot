@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.kampaii.telegram.exceptions.CallbackNotFoundException;
 import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.services.CallbackService;
-import ru.kampaii.telegram.utils.callback.CallbackExecutor;
+import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,5 +45,7 @@ public class CallbackServiceImpl implements CallbackService {
         }
 
         callbackExecutor.execute(update);
+
+        callbacks.remove(messageId);
     }
 }
