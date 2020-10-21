@@ -3,7 +3,6 @@ package ru.kampaii.telegram.bots;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -16,7 +15,6 @@ import ru.kampaii.telegram.services.UserService;
 
 import java.util.List;
 
-@Component
 public class ChatBot extends TelegramLongPollingCommandBot {
 
     private static final Logger log = LoggerFactory.getLogger(ChatBot.class);
@@ -65,8 +63,8 @@ public class ChatBot extends TelegramLongPollingCommandBot {
         }
 
         for (NonCommandUpdateExecutor executor : nonCommandUpdateExecutors) {
-            if(executor.applies(update,this)){
-                executor.execute(update,this);
+            if(executor.applies(update)){
+                executor.execute(update);
             }
         }
 

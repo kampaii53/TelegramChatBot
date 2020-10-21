@@ -2,28 +2,36 @@ package ru.kampaii.telegram.actions.updates.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.kampaii.telegram.actions.updates.NonCommandUpdateExecutor;
-import ru.kampaii.telegram.bots.ChatBot;
+import ru.kampaii.telegram.services.ChatService;
 
 import java.util.List;
 
 @Component
-public class AddChatExecutor implements NonCommandUpdateExecutor {
+public class AddChatExecutor extends NonCommandUpdateExecutor {
 
     private static final Logger log = LoggerFactory.getLogger(AddChatExecutor.class);
 
+    private final ChatService chatService;
+
+    public AddChatExecutor(ChatService chatService, ApplicationContext context) {
+        super(context);
+        this.chatService = chatService;
+    }
+
     @Override
-    public boolean applies(Update update,ChatBot bot) {
+    public boolean applies(Update update) {
         List<User> newChatMembers = update.getMessage().getNewChatMembers();
-        if(newChatMembers == null || newChatMembers.size() == 0) {
+        if(newChatMembers == null || newChatMembers.size() == 0 ) {
             return false;
         }
         try {
-            User botUser = bot.getMe();
+            User botUser = getChatBot().getMe();
             for (User newChatMember : newChatMembers) {
                 if(newChatMember.getId().equals(botUser.getId())){
                     return true;
@@ -38,7 +46,10 @@ public class AddChatExecutor implements NonCommandUpdateExecutor {
     }
 
     @Override
-    public void execute(Update update, ChatBot bot) {
-
+    public void execute(Update update) {
+        Long chatId = update.getMessage().getChat().getId();
+        log.debug("Добавляемся в группу {}",chatId);
+        chatService.addChat(chatId);
+        getChatBot().sendMessageToChat(chatId,"Всем кукуси я Натуся");
     }
 }
