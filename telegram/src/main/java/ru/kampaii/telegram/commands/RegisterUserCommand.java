@@ -33,18 +33,19 @@ public class RegisterUserCommand extends AbstractCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        if(userService.isUserAdmin(user.getId())){
-            SendMessage reply = new SendMessage(chat.getId(),"Выберите пользователя для добавления в администраторы бота");
-            reply.setReplyMarkup(new ForceReplyKeyboard());
-            try {
-                Message message = absSender.execute(reply);
-                callbackService.registerCallback(message.getMessageId(), RegisterAdministratorCallback.class);
-            } catch (TelegramApiException e) {
-                log.error("Не удалось отправить запрос на добавление пользователя",e);
-            }
-        }
-        else{
+        //TODO вынести проверку в аннотации
+        if(!userService.isUserAdmin(user.getId())) {
             sendMessage(absSender,chat.getId(),"Пользователь не является администратором");
+            return;
+        }
+
+        SendMessage reply = new SendMessage(chat.getId(),"Выберите пользователя для добавления в администраторы бота");
+        reply.setReplyMarkup(new ForceReplyKeyboard());
+        try {
+            Message message = absSender.execute(reply);
+            callbackService.registerCallback(message.getMessageId(), RegisterAdministratorCallback.class);
+        } catch (TelegramApiException e) {
+            log.error("Не удалось отправить запрос на добавление пользователя",e);
         }
     }
 }

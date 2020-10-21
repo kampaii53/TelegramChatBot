@@ -12,6 +12,7 @@ import ru.kampaii.telegram.commands.AbstractCommand;
 import ru.kampaii.telegram.exceptions.CallbackNotFoundException;
 import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.services.CallbackService;
+import ru.kampaii.telegram.services.UserService;
 
 import java.util.List;
 
@@ -21,11 +22,14 @@ public class ChatBot extends TelegramLongPollingCommandBot {
 
     private static final String token = "1378282874:AAEazWiv4UsjAMPxyEfX_25Aw7s8t5siEeM";
     private static final String name = "PlayReminderBot";
-    private final CallbackService callbackService;
 
-    public ChatBot(DefaultBotOptions botOptions, List<AbstractCommand> commands, CallbackService callbackService) {
+    private final CallbackService callbackService;
+    private final UserService userService;
+
+    public ChatBot(DefaultBotOptions botOptions, List<AbstractCommand> commands, CallbackService callbackService, UserService userService) {
         super(botOptions);
         this.callbackService = callbackService;
+        this.userService = userService;
 
         for (AbstractCommand command : commands) {
             this.register(command);
@@ -52,14 +56,26 @@ public class ChatBot extends TelegramLongPollingCommandBot {
 
     @Override
     public void processNonCommandUpdate(Update update) {
+        if(!userService.isUserAdmin(update.getMessage().getFrom().getId())){
+            sendMessageToChat(update.getMessage().getChatId(),"Пользователь не являается администратором");
+            return;
+        }
+
         try {
             callbackService.executeCallback(update.getMessage().getReplyToMessage().getMessageId(),update);
         } catch (CallbackNotFoundException ex){
-            ex.printStackTrace();
-        } catch (ChatBotException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e){
-            log.error("this is not a callback");
+            sendMessageToChat(update.getMessage().getChatId(),"Не найдено обработчика ответа для вашего сообщения");
+        } catch (ChatBotException | NullPointerException e) {
+            log.error("Произошло исключение при запуске колбэка",e);
+            sendMessageToChat(update.getMessage().getChatId(),"Произошло непредвиденное исключение");
+        }
+    }
+
+    private void sendMessageToChat(Long chatId,String message){
+        try {
+            execute(new SendMessage(chatId,message));
+        } catch (TelegramApiException e) {
+            log.error("Не удалось отправить сообщение пользователю",e);
         }
     }
 
