@@ -7,11 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="app" />
+        <module name="gdocs" />
         <module name="telegram" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="app" target="1.5" />
+    <bytecodeTargetLevel target="8">
+      <module name="app" target="8" />
+      <module name="gdocs" target="8" />
       <module name="telegram" target="8" />
       <module name="TelegramChatBot" target="1.5" />
     </bytecodeTargetLevel>

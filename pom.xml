@@ -12,6 +12,7 @@
     <modules>
         <module>telegram</module>
         <module>app</module>
+        <module>gdocs</module>
     </modules>
 
     <properties>

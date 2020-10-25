@@ -3,6 +3,7 @@ package ru.kampaii.telegram.services.impl;
 import org.springframework.stereotype.Service;
 import ru.kampaii.telegram.services.ChatService;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,5 +25,10 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public boolean isChatEnabled(Long chatId) {
         return this.enabledChats.contains(chatId);
+    }
+
+    @Override
+    public Collection<Long> getChats() {
+        return enabledChats;
     }
 }

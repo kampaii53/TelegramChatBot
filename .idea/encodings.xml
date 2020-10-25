@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/gdocs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/telegram" charset="UTF-8" />
   </component>
 </project>
