@@ -1,7 +1,8 @@
 package ru.kampaii.bot.entities;
 
+import ru.kampaii.bot.utils.DateHelper;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class FileLineEntity {
@@ -27,8 +28,7 @@ public class FileLineEntity {
     public FileLineEntity(List<Object> values){
         this.chat = getStringValue(values,0);
         this.isContinuing = getStringValue(values,1).equals("Да");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        this.executionDate = LocalDateTime.parse(getStringValue(values,2),formatter);
+        this.executionDate = DateHelper.getDateTime(getStringValue(values,2));
         this.message = getStringValue(values,3);
         this.adresate = getStringValue(values,4);
     }

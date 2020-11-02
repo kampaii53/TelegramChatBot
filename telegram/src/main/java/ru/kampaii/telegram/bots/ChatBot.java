@@ -8,10 +8,11 @@ import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingC
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.kampaii.bot.data.entities.UserRights;
+import ru.kampaii.bot.data.services.UserService;
 import ru.kampaii.telegram.actions.commands.AbstractCommand;
 import ru.kampaii.telegram.actions.updates.NonCommandUpdateExecutor;
 import ru.kampaii.telegram.services.CallbackService;
-import ru.kampaii.telegram.services.UserService;
 
 import java.util.List;
 
@@ -57,8 +58,8 @@ public class ChatBot extends TelegramLongPollingCommandBot {
 
     @Override
     public void processNonCommandUpdate(Update update) {
-        if(!userService.isUserAdmin(update.getMessage().getFrom().getId())){
-            sendMessageToChat(update.getMessage().getChatId(),"Пользователь не являается администратором");
+        if(!userService.hasRights(update.getMessage().getFrom().getId(), UserRights.USER)){
+            sendMessageToChat(update.getMessage().getChatId(),"Пользователь не зарегистрирован");
             return;
         }
 
@@ -67,12 +68,12 @@ public class ChatBot extends TelegramLongPollingCommandBot {
                 executor.execute(update);
             }
         }
-
     }
 
     public void sendMessageToChat(Long chatId,String message){
         try {
             execute(new SendMessage(chatId,message));
+            log.debug("message to {} : {}",chatId,message);
         } catch (TelegramApiException e) {
             log.error("Не удалось отправить сообщение пользователю",e);
         }

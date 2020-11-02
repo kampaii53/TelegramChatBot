@@ -5,10 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.kampaii.bot.data.services.ChatService;
 import ru.kampaii.bot.entities.FileLineEntity;
 import ru.kampaii.gdocs.services.GoogleSheetsService;
 import ru.kampaii.telegram.bots.ChatBot;
-import ru.kampaii.telegram.services.ChatService;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,9 +41,9 @@ public class ReadFileJob {
 
         for (int i = 1; i < values.size(); i++) {
             FileLineEntity line = new FileLineEntity(values.get(i));
-            for (Long chat : chatService.getChats()) {
-                chatBot.sendMessageToChat(chat,line.toString());
-            }
+//            for (Long chat : chatService.getChats()) {
+//                chatBot.sendMessageToChat(chat,line.toString());
+//            }
         }
     }
 }

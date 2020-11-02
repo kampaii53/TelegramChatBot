@@ -13,6 +13,7 @@
         <module>telegram</module>
         <module>app</module>
         <module>gdocs</module>
+        <module>data</module>
     </modules>
 
     <properties>

@@ -9,6 +9,10 @@ public class ChatBotException extends Exception {
         super(reason,e);
     }
 
+    public ChatBotException(Exception e){
+        super(e);
+    }
+
     public ChatBotException() {
 
     }

@@ -85,6 +85,9 @@
           <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client-jetty:1.31.1" />
           <element id="library" level="project" name="Maven: com.google.oauth-client:google-oauth-client-java6:1.31.1" />
           <element id="library" level="project" name="Maven: com.google.apis:google-api-services-sheets:v4-rev612-1.25.0" />
+          <element id="archive" name="data-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="data" />
+          </element>
         </element>
       </element>
       <element id="directory" name="META-INF">

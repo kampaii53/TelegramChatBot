@@ -11,9 +11,10 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.kampaii.bot.data.entities.UserRights;
+import ru.kampaii.bot.data.services.UserService;
+import ru.kampaii.telegram.actions.callbacks.impl.RegisterUserCallback;
 import ru.kampaii.telegram.services.CallbackService;
-import ru.kampaii.telegram.services.UserService;
-import ru.kampaii.telegram.actions.callbacks.impl.RegisterAdministratorCallback;
 
 @Component
 public class RegisterUserCommand extends AbstractCommand {
@@ -34,7 +35,7 @@ public class RegisterUserCommand extends AbstractCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         //TODO вынести проверку в аннотации
-        if(!userService.isUserAdmin(user.getId())) {
+        if(!userService.hasRights(user.getId(),UserRights.ADMIN)) {
             sendMessage(absSender,chat.getId(),"Пользователь не является администратором");
             return;
         }
@@ -43,7 +44,7 @@ public class RegisterUserCommand extends AbstractCommand {
         reply.setReplyMarkup(new ForceReplyKeyboard());
         try {
             Message message = absSender.execute(reply);
-            callbackService.registerCallback(message.getMessageId(), RegisterAdministratorCallback.class);
+            callbackService.registerCallback(message.getMessageId(), RegisterUserCallback.class);
         } catch (TelegramApiException e) {
             log.error("Не удалось отправить запрос на добавление пользователя",e);
         }

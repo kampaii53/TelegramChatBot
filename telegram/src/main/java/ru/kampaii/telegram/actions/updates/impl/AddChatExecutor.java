@@ -7,8 +7,9 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.kampaii.bot.data.exceptions.DataException;
+import ru.kampaii.bot.data.services.ChatService;
 import ru.kampaii.telegram.actions.updates.NonCommandUpdateExecutor;
-import ru.kampaii.telegram.services.ChatService;
 
 import java.util.List;
 
@@ -49,7 +50,11 @@ public class AddChatExecutor extends NonCommandUpdateExecutor {
     public void execute(Update update) {
         Long chatId = update.getMessage().getChat().getId();
         log.debug("Добавляемся в группу {}",chatId);
-        chatService.addChat(chatId);
-        getChatBot().sendMessageToChat(chatId,"Всем кукуси я Натуся");
+        try {
+            chatService.addChat(chatId);
+            getChatBot().sendMessageToChat(chatId,"Всем кукуси я Натуся");
+        } catch (DataException e) {
+            getChatBot().sendMessageToChat(chatId,"Не удалось добавить чат");
+        }
     }
 }
