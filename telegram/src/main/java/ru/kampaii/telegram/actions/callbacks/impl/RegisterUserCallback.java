@@ -12,7 +12,6 @@ import ru.kampaii.bot.data.entities.UserRights;
 import ru.kampaii.bot.data.exceptions.DataException;
 import ru.kampaii.bot.data.services.UserService;
 import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
-import ru.kampaii.telegram.bots.ChatBot;
 import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.utils.BotAware;
 
@@ -24,13 +23,10 @@ public class RegisterUserCallback extends BotAware implements CallbackExecutor<U
 
     private final UserService userService;
 
-    private final ChatBot chatBot;
-
     @Autowired
-    public RegisterUserCallback(ApplicationContext applicationContext,UserService userService, ChatBot chatBot) {
+    public RegisterUserCallback(ApplicationContext applicationContext,UserService userService) {
         super(applicationContext);
         this.userService = userService;
-        this.chatBot = chatBot;
     }
 
     @Override
@@ -41,7 +37,7 @@ public class RegisterUserCallback extends BotAware implements CallbackExecutor<U
 
         Contact contact = update.getMessage().getContact();
 
-        if(userService.get(contact.getUserID()) != null) {
+        if(userService.get(contact.getUserID()) == null) {
             userService.add(new UserEntity(contact.getUserID(), getUserNameFromContact(contact), new ArrayList<>(), UserRights.USER));
             getChatBot().sendMessageToChat(update.getMessage().getChatId(),"Пользователь успешно зарегистрирован");
         }
