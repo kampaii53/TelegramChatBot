@@ -12,6 +12,7 @@ import ru.kampaii.gdocs.services.GoogleSheetsService;
 import ru.kampaii.telegram.bots.ChatBot;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -32,7 +33,7 @@ public class ReadFileJob {
         this.chatService = chatService;
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 60000)
     public void execute() throws IOException {
         log.debug("ReadFileJob executes");
 
@@ -41,13 +42,14 @@ public class ReadFileJob {
         for (ChatEntity chat : chats) {
             List<List<Object>> values = googleSheetsService.getSheetValue(chat.getFileId());
 
+            LocalDateTime executionTimestamp = LocalDateTime.now();
+
             for (int i = 1; i < values.size(); i++) {
                 FileLineEntity line = new FileLineEntity(values.get(i));
-
-                chatBot.sendMessageToChat(chat.getId(),"Нашел сообщение: "+line.toString());
+                if(executionTimestamp.toLocalDate().equals(line.getExecutionDate()) && executionTimestamp.getHour() == 19 && executionTimestamp.getMinute() == 0){
+                    chatBot.sendMessageToChat(chat.getId(),line.getMessage());
+                }
             }
         }
-
-
     }
 }

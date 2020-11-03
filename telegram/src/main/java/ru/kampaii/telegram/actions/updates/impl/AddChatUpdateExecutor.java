@@ -60,7 +60,6 @@ public class AddChatUpdateExecutor extends NonCommandUpdateExecutor {
         log.debug("Добавляемся в группу {}",chatId);
         try {
             chatService.addChat(chatId);
-            getChatBot().sendMessageToChat(chatId,"Всем привет!");
 
             SendMessage message = new SendMessage(update.getMessage().getFrom().getId().toString(),BotMessages.CHAT_ADD_MESSAGE.getValue() +chatId);
             message.setReplyMarkup(new ForceReplyKeyboard());
