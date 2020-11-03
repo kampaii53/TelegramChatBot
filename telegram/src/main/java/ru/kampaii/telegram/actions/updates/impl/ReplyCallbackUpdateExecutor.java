@@ -12,14 +12,14 @@ import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.services.CallbackService;
 
 @Component
-public class ReplyCallbackExecutor extends NonCommandUpdateExecutor {
+public class ReplyCallbackUpdateExecutor extends NonCommandUpdateExecutor {
 
-    private static final Logger log = LoggerFactory.getLogger(ReplyCallbackExecutor.class);
+    private static final Logger log = LoggerFactory.getLogger(ReplyCallbackUpdateExecutor.class);
 
     private final CallbackService callbackService;
 
     @Autowired
-    public ReplyCallbackExecutor(CallbackService callbackService, ApplicationContext context) {
+    public ReplyCallbackUpdateExecutor(CallbackService callbackService, ApplicationContext context) {
         super(context);
         this.callbackService = callbackService;
     }

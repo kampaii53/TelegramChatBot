@@ -30,7 +30,7 @@ public class RegisterUserCallback extends BotAware implements CallbackExecutor<U
     }
 
     @Override
-    public void execute(Update update) throws ChatBotException, DataException {
+    public void execute(Update update) throws ChatBotException{
         if(update.getMessage().getContact() == null){
             throw new ChatBotException("Не заполнен контакт");
         }
@@ -38,7 +38,11 @@ public class RegisterUserCallback extends BotAware implements CallbackExecutor<U
         Contact contact = update.getMessage().getContact();
 
         if(userService.get(contact.getUserID()) == null) {
-            userService.add(new UserEntity(contact.getUserID(), getUserNameFromContact(contact), new ArrayList<>(), UserRights.USER));
+            try {
+                userService.add(new UserEntity(contact.getUserID(), getUserNameFromContact(contact), new ArrayList<>(), UserRights.USER));
+            } catch (DataException e) {
+                throw new ChatBotException(e);
+            }
             getChatBot().sendMessageToChat(update.getMessage().getChatId(),"Пользователь успешно зарегистрирован");
         }
         else{

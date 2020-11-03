@@ -2,11 +2,10 @@ package ru.kampaii.telegram.services.impl;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kampaii.bot.data.exceptions.DataException;
+import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
 import ru.kampaii.telegram.exceptions.CallbackNotFoundException;
 import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.services.CallbackService;
-import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,11 +44,7 @@ public class CallbackServiceImpl implements CallbackService {
             throw new ChatBotException("Не найдено обработчика колбэка "+callbackClass.getName());
         }
 
-        try {
-            callbackExecutor.execute(update);
-        } catch (DataException e) {
-            throw new ChatBotException(e);
-        }
+        callbackExecutor.execute(update);
 
         callbacks.remove(messageId);
     }

@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.kampaii.bot.data.entities.UserRights;
@@ -70,12 +71,23 @@ public class ChatBot extends TelegramLongPollingCommandBot {
         }
     }
 
-    public void sendMessageToChat(Long chatId,String message){
+    public Message sendMessageToChat(Long chatId, String message){
         try {
-            execute(new SendMessage(chatId,message));
             log.debug("message to {} : {}",chatId,message);
+            return execute(new SendMessage(chatId, message));
         } catch (TelegramApiException e) {
             log.error("Не удалось отправить сообщение пользователю",e);
+            return null;
+        }
+    }
+
+    public Message sendMessageToUser(Integer userId, String message){
+        try {
+            log.debug("message to {} : {}",userId,message);
+            return execute(new SendMessage(userId.toString(), message));
+        } catch (TelegramApiException e) {
+            log.error("Не удалось отправить сообщение пользователю",e);
+            return null;
         }
     }
 
