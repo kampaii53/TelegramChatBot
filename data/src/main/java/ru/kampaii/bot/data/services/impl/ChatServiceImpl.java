@@ -6,7 +6,9 @@ import ru.kampaii.bot.data.exceptions.DataException;
 import ru.kampaii.bot.data.services.ChatService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -25,6 +27,10 @@ public class ChatServiceImpl implements ChatService {
             throw new DataException("Chat not registered");
         }
         this.chats.get(chatId).setFileId(fileId);
+    }
+
+    public List<ChatEntity> getActiveChats() {
+        return this.chats.values().stream().filter(chatEntity -> chatEntity.getFileId() != null).collect(Collectors.toList());
     }
 
     public void removeChat(Long chatId) {

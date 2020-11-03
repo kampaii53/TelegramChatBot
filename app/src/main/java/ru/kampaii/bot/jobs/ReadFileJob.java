@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.kampaii.bot.data.entities.ChatEntity;
 import ru.kampaii.bot.data.services.ChatService;
 import ru.kampaii.bot.entities.FileLineEntity;
 import ru.kampaii.gdocs.services.GoogleSheetsService;
@@ -24,8 +25,6 @@ public class ReadFileJob {
 
     private final ChatService chatService;
 
-    private static final String SPREADSHEET_ID = "1lwQDTx_DQPogr_bgBuPbD8Yqtk551Kkn-LKXPAUx7fc"; //TODO вынести в проперти
-
     @Autowired
     public ReadFileJob(GoogleSheetsService googleSheetsService, ChatBot chatBot, ChatService chatService) {
         this.googleSheetsService = googleSheetsService;
@@ -37,13 +36,18 @@ public class ReadFileJob {
     public void execute() throws IOException {
         log.debug("ReadFileJob executes");
 
-        List<List<Object>> values = googleSheetsService.getSheetValue(SPREADSHEET_ID);
+        List<ChatEntity> chats = chatService.getActiveChats();
 
-        for (int i = 1; i < values.size(); i++) {
-            FileLineEntity line = new FileLineEntity(values.get(i));
-//            for (Long chat : chatService.getChats()) {
-//                chatBot.sendMessageToChat(chat,line.toString());
-//            }
+        for (ChatEntity chat : chats) {
+            List<List<Object>> values = googleSheetsService.getSheetValue(chat.getFileId());
+
+            for (int i = 1; i < values.size(); i++) {
+                FileLineEntity line = new FileLineEntity(values.get(i));
+
+                chatBot.sendMessageToChat(chat.getId(),"Нашел сообщение: "+line.toString());
+            }
         }
+
+
     }
 }

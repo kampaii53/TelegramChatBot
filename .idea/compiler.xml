@@ -14,7 +14,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel target="8">
       <module name="app" target="8" />
-      <module name="data" target="1.5" />
+      <module name="data" target="8" />
       <module name="gdocs" target="8" />
       <module name="telegram" target="8" />
       <module name="TelegramChatBot" target="1.5" />
