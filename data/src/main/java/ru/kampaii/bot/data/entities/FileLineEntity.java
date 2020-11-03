@@ -1,8 +1,9 @@
-package ru.kampaii.bot.entities;
+package ru.kampaii.bot.data.entities;
 
-import ru.kampaii.bot.utils.DateHelper;
 
-import java.time.LocalDateTime;
+import ru.kampaii.bot.data.utils.DateHelper;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class FileLineEntity {
@@ -11,13 +12,13 @@ public class FileLineEntity {
 
     private boolean isContinuing;
 
-    private LocalDateTime executionDate;
+    private LocalDate executionDate;
 
     private String message;
 
     private String adresate;
 
-    public FileLineEntity(String chat, boolean isContinuing, LocalDateTime executionDate, String message, String adresate) {
+    public FileLineEntity(String chat, boolean isContinuing, LocalDate executionDate, String message, String adresate) {
         this.chat = chat;
         this.isContinuing = isContinuing;
         this.executionDate = executionDate;
@@ -28,7 +29,7 @@ public class FileLineEntity {
     public FileLineEntity(List<Object> values){
         this.chat = getStringValue(values,0);
         this.isContinuing = getStringValue(values,1).equals("Да");
-        this.executionDate = DateHelper.getDateTime(getStringValue(values,2));
+        this.executionDate = DateHelper.getDate(getStringValue(values,2));
         this.message = getStringValue(values,3);
         this.adresate = getStringValue(values,4);
     }
@@ -49,11 +50,11 @@ public class FileLineEntity {
         isContinuing = continuing;
     }
 
-    public LocalDateTime getExecutionDate() {
+    public LocalDate getExecutionDate() {
         return executionDate;
     }
 
-    public void setExecutionDate(LocalDateTime executionDate) {
+    public void setExecutionDate(LocalDate executionDate) {
         this.executionDate = executionDate;
     }
 

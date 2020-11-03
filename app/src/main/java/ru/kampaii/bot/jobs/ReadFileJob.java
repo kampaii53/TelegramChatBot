@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.kampaii.bot.data.entities.ChatEntity;
+import ru.kampaii.bot.data.entities.FileLineEntity;
 import ru.kampaii.bot.data.services.ChatService;
-import ru.kampaii.bot.entities.FileLineEntity;
 import ru.kampaii.gdocs.services.GoogleSheetsService;
 import ru.kampaii.telegram.bots.ChatBot;
 
