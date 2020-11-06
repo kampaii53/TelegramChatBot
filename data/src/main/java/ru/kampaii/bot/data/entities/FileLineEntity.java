@@ -14,24 +14,28 @@ public class FileLineEntity {
 
     private LocalDate executionDate;
 
+    private String theme;
+
     private String message;
 
     private String adresate;
 
-    public FileLineEntity(String chat, boolean isContinuing, LocalDate executionDate, String message, String adresate) {
+    public FileLineEntity(String chat, boolean isContinuing, LocalDate executionDate, String theme, String message, String adresate) {
         this.chat = chat;
         this.isContinuing = isContinuing;
         this.executionDate = executionDate;
+        this.theme = theme;
         this.message = message;
         this.adresate = adresate;
     }
 
     public FileLineEntity(List<Object> values){
         this.chat = getStringValue(values,0);
-        this.isContinuing = getStringValue(values,1).equals("Да");
+        this.isContinuing = "Да".equalsIgnoreCase(getStringValue(values, 1));
         this.executionDate = DateHelper.getDate(getStringValue(values,2));
-        this.message = getStringValue(values,3);
-        this.adresate = getStringValue(values,4);
+        this.theme = getStringValue(values,3);
+        this.message = getStringValue(values,4);
+        this.adresate = getStringValue(values,5);
     }
 
     public String getChat() {
@@ -74,6 +78,10 @@ public class FileLineEntity {
         this.message = message;
     }
 
+    public String constructMessage(){
+        return this.theme == null ? message : theme+": "+message;
+    }
+
     private String getStringValue(List<Object> object,int index){
         try{
             return object.get(index).toString();
@@ -92,5 +100,13 @@ public class FileLineEntity {
                 ", message='" + message + '\'' +
                 ", adresate='" + adresate + '\'' +
                 '}';
+    }
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
     }
 }
