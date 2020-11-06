@@ -20,7 +20,7 @@ public class ChatServiceImpl implements ChatService {
         if(this.chats.containsKey(chatId)){
             throw new DataException("Chat already enabled");
         }
-        this.chats.put(chatId, new ChatEntity(chatId,null, LocalTime.of(9,0)));
+        this.chats.put(chatId, new ChatEntity(chatId,null, null));
     }
 
     @Override
