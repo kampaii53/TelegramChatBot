@@ -1,13 +1,14 @@
 package ru.kampaii.telegram.services;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
+import ru.kampaii.telegram.exceptions.ChatBotException;
+
+import java.util.Map;
 
 public interface CallbackService {
 
-    //TODO fix: messageId уникален только в рамках чата
-    void registerCallback(Integer messageId, Class<? extends CallbackExecutor> executorClass);
+    void registerCallback(Long chatId, Integer messageId, Class<? extends CallbackExecutor> executorClass, Map<String,Object> parameters);
 
-    void executeCallback(Integer messageId, Update update) throws ChatBotException;
+    void executeCallback(Long chatId, Integer messageId, Update update) throws ChatBotException;
 }

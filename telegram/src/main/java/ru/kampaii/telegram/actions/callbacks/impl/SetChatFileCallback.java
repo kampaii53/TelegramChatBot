@@ -10,10 +10,13 @@ import ru.kampaii.bot.data.services.ChatService;
 import ru.kampaii.telegram.actions.callbacks.CallbackExecutor;
 import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.utils.BotAware;
-import ru.kampaii.telegram.utils.BotMessages;
+
+import java.util.Map;
 
 @Component
 public class SetChatFileCallback extends BotAware implements CallbackExecutor<Update> {
+
+    public static final String CHAT_PARAMETER = "chat";
 
     private static final Logger log = LoggerFactory.getLogger(SetChatFileCallback.class);
 
@@ -25,9 +28,21 @@ public class SetChatFileCallback extends BotAware implements CallbackExecutor<Up
     }
 
     @Override
-    public void execute(Update update) throws ChatBotException{
-        Long chatId = Long.parseLong(update.getMessage().getReplyToMessage().getText().replace(BotMessages.CHAT_GET_KEY.getValue(),""));
-        String key = parseKey(update.getMessage().getText());
+    public void execute(Update update, Map<String,Object> parameters) throws ChatBotException{
+        Long chatId;
+
+        try{
+            chatId = (Long) parameters.get(CHAT_PARAMETER);
+        }
+        catch (Exception e){
+            throw new ChatBotException(e);
+        }
+
+        if(chatId == null){
+            throw new ChatBotException("Не найден идентификатор чата для ответа");
+        }
+
+        String key = update.getMessage().getText();
 
         try {
             chatService.updateChat(chatId,key);
@@ -36,13 +51,5 @@ public class SetChatFileCallback extends BotAware implements CallbackExecutor<Up
         }
 
         getChatBot().sendMessageToChat(update.getMessage().getChatId(),"Успешно добавил ключ "+key+" к чату "+chatId);
-    }
-
-    private String parseKey(String url){
-        log.debug("Пытаюсь разобрать URL {}",url);
-        String result = url.replace("https://docs.google.com/spreadsheets/d/","");
-
-        result = result.substring(0,result.indexOf("/edit"));
-        return result;
     }
 }

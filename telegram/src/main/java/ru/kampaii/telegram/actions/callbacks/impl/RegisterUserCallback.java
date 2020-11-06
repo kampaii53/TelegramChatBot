@@ -16,6 +16,7 @@ import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.utils.BotAware;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Component
 public class RegisterUserCallback extends BotAware implements CallbackExecutor<Update> {
@@ -30,7 +31,7 @@ public class RegisterUserCallback extends BotAware implements CallbackExecutor<U
     }
 
     @Override
-    public void execute(Update update) throws ChatBotException{
+    public void execute(Update update, Map<String,Object> parameters) throws ChatBotException{
         if(update.getMessage().getContact() == null){
             throw new ChatBotException("Не заполнен контакт");
         }

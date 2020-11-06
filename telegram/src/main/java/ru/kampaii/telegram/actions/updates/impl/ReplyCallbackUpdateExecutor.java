@@ -39,7 +39,7 @@ public class ReplyCallbackUpdateExecutor extends NonCommandUpdateExecutor {
         // если это у нас ответ на сообщение, значит дергаем с коллбэками
         if(update.getMessage().getReplyToMessage() != null) {
             try {
-                callbackService.executeCallback(update.getMessage().getReplyToMessage().getMessageId(), update);
+                callbackService.executeCallback(update.getMessage().getChatId(),update.getMessage().getReplyToMessage().getMessageId(), update);
             } catch (CallbackNotFoundException ex) {
                 log.error("Произошло исключение при запуске колбэка", ex);
                 getChatBot().sendMessageToChat(update.getMessage().getChatId(), "Не найдено обработчика ответа для вашего сообщения");

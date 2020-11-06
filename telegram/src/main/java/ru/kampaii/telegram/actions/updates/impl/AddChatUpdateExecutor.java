@@ -16,6 +16,7 @@ import ru.kampaii.telegram.actions.updates.NonCommandUpdateExecutor;
 import ru.kampaii.telegram.services.CallbackService;
 import ru.kampaii.telegram.utils.BotMessages;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -68,7 +69,7 @@ public class AddChatUpdateExecutor extends NonCommandUpdateExecutor {
             message.setReplyMarkup(new ForceReplyKeyboard());
             Message result = getChatBot().execute(message);
 
-            callbackService.registerCallback(result.getMessageId(), SetChatFileCallback.class);
+            callbackService.registerCallback(Long.valueOf(message.getChatId()), result.getMessageId(), SetChatFileCallback.class, Collections.singletonMap(SetChatFileCallback.CHAT_PARAMETER,chatId));
         } catch (Exception e) {
             getChatBot().sendMessageToUser(userId,"Произошла ошибка: "+e.getMessage());
             log.error("Не удалось подключить бота к чату",e);

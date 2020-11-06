@@ -44,7 +44,7 @@ public class RegisterUserCommand extends AbstractCommand {
         reply.setReplyMarkup(new ForceReplyKeyboard());
         try {
             Message message = absSender.execute(reply);
-            callbackService.registerCallback(message.getMessageId(), RegisterUserCallback.class);
+            callbackService.registerCallback(message.getChatId(),message.getMessageId(), RegisterUserCallback.class, null);
         } catch (TelegramApiException e) {
             log.error("Не удалось отправить запрос на добавление пользователя",e);
         }
