@@ -34,23 +34,32 @@ public class ReadFileJob {
     }
 
     @Scheduled(fixedDelay = 60000)
-    public void execute() throws IOException {
+    public void execute() {
         log.debug("ReadFileJob executes");
 
         List<ChatEntity> chats = chatService.getActiveChats();
+        LocalDateTime executionTimestamp = LocalDateTime.now();
 
         for (ChatEntity chat : chats) {
-            List<List<Object>> values = googleSheetsService.getSheetValue(chat.getFileId());
+            if (chat.getTime().getHour() == executionTimestamp.getHour()
+                    && chat.getTime().getMinute() == executionTimestamp.getMinute()) {
 
-            LocalDateTime executionTimestamp = LocalDateTime.now();
+                new Thread(() -> {
+                    log.debug("Thread of chat {} started",chat.getId());
+                    try {
+                        List<List<Object>> values = googleSheetsService.getSheetValue(chat.getFileId());
+                        for (int i = 1; i < values.size(); i++) {
+                            FileLineEntity line = new FileLineEntity(values.get(i));
+                            if (executionTimestamp.toLocalDate().equals(line.getExecutionDate())) {
+                                chatBot.sendMessageToChat(chat.getId(), line.constructMessage());
+                            }
+                        }
+                    } catch (IOException e) {
+                        log.error("error while read file " + chat.getFileId() + " of chat " + chat.getId(), e);
+                    }
+                    log.debug("Thread of chat {} finished",chat.getId());
+                }).start();
 
-            for (int i = 1; i < values.size(); i++) {
-                FileLineEntity line = new FileLineEntity(values.get(i));
-                if(executionTimestamp.toLocalDate().equals(line.getExecutionDate())
-                        && chat.getTime().getHour() == executionTimestamp.getHour()
-                        && chat.getTime().getMinute() == executionTimestamp.getMinute()){
-                    chatBot.sendMessageToChat(chat.getId(),line.getMessage());
-                }
             }
         }
     }
