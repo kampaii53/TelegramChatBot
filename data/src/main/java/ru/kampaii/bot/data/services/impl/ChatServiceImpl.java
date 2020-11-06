@@ -5,6 +5,7 @@ import ru.kampaii.bot.data.entities.ChatEntity;
 import ru.kampaii.bot.data.exceptions.DataException;
 import ru.kampaii.bot.data.services.ChatService;
 
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class ChatServiceImpl implements ChatService {
         if(this.chats.containsKey(chatId)){
             throw new DataException("Chat already enabled");
         }
-        this.chats.put(chatId, new ChatEntity(chatId,null));
+        this.chats.put(chatId, new ChatEntity(chatId,null, LocalTime.of(9,0)));
     }
 
     public void updateChat(Long chatId, String fileId) throws DataException {

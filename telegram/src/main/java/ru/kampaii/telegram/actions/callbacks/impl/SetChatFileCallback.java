@@ -26,7 +26,7 @@ public class SetChatFileCallback extends BotAware implements CallbackExecutor<Up
 
     @Override
     public void execute(Update update) throws ChatBotException{
-        Long chatId = Long.parseLong(update.getMessage().getReplyToMessage().getText().replace(BotMessages.CHAT_ADD_MESSAGE.getValue(),""));
+        Long chatId = Long.parseLong(update.getMessage().getReplyToMessage().getText().replace(BotMessages.CHAT_GET_KEY.getValue(),""));
         String key = parseKey(update.getMessage().getText());
 
         try {
@@ -39,7 +39,10 @@ public class SetChatFileCallback extends BotAware implements CallbackExecutor<Up
     }
 
     private String parseKey(String url){
-        String result = url.replace("https://docs.google.com/spreadsheets/d/","").replace("/edit?usp=sharing","");
+        log.debug("Пытаюсь разобрать URL {}",url);
+        String result = url.replace("https://docs.google.com/spreadsheets/d/","");
+
+        result = result.substring(0,result.indexOf("/edit"));
         return result;
     }
 }

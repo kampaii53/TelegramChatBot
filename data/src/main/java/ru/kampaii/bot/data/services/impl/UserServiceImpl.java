@@ -19,6 +19,7 @@ public class UserServiceImpl implements UserService {
         this.users = new HashMap<Integer, UserEntity>();
 
         users.put(699917602,new UserEntity(699917602,"Kirill Kuznetsov",null,UserRights.ADMIN));
+        users.put(382798906,new UserEntity(382798906,"Sergey Grishin",null,UserRights.ADMIN));
     }
 
     public void add(UserEntity user) throws DataException {

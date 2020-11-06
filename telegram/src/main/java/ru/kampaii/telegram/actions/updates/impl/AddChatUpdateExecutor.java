@@ -58,16 +58,19 @@ public class AddChatUpdateExecutor extends NonCommandUpdateExecutor {
     public void execute(Update update) {
         Long chatId = update.getMessage().getChat().getId();
         log.debug("Добавляемся в группу {}",chatId);
+        Integer userId = update.getMessage().getFrom().getId();
         try {
             chatService.addChat(chatId);
 
-            SendMessage message = new SendMessage(update.getMessage().getFrom().getId().toString(),BotMessages.CHAT_ADD_MESSAGE.getValue() +chatId);
+            getChatBot().sendMessageToUser(userId,BotMessages.CHAT_ADD_MESSAGE.getValue());
+
+            SendMessage message = new SendMessage(userId.toString(),BotMessages.CHAT_GET_KEY.getValue() +chatId);
             message.setReplyMarkup(new ForceReplyKeyboard());
             Message result = getChatBot().execute(message);
 
             callbackService.registerCallback(result.getMessageId(), SetChatFileCallback.class);
         } catch (Exception e) {
-            getChatBot().sendMessageToUser(update.getMessage().getFrom().getId(),"Произошла ошибка: "+e.getMessage());
+            getChatBot().sendMessageToUser(userId,"Произошла ошибка: "+e.getMessage());
             log.error("Не удалось подключить бота к чату",e);
         }
     }

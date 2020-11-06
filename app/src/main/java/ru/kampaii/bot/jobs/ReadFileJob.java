@@ -46,7 +46,9 @@ public class ReadFileJob {
 
             for (int i = 1; i < values.size(); i++) {
                 FileLineEntity line = new FileLineEntity(values.get(i));
-                if(executionTimestamp.toLocalDate().equals(line.getExecutionDate()) && executionTimestamp.getHour() == 19 && executionTimestamp.getMinute() == 0){
+                if(executionTimestamp.toLocalDate().equals(line.getExecutionDate())
+                        && chat.getTime().getHour() == executionTimestamp.getHour()
+                        && chat.getTime().getMinute() == executionTimestamp.getMinute()){
                     chatBot.sendMessageToChat(chat.getId(),line.getMessage());
                 }
             }

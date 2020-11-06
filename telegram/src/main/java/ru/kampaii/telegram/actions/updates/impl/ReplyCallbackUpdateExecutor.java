@@ -41,6 +41,7 @@ public class ReplyCallbackUpdateExecutor extends NonCommandUpdateExecutor {
             try {
                 callbackService.executeCallback(update.getMessage().getReplyToMessage().getMessageId(), update);
             } catch (CallbackNotFoundException ex) {
+                log.error("Произошло исключение при запуске колбэка", ex);
                 getChatBot().sendMessageToChat(update.getMessage().getChatId(), "Не найдено обработчика ответа для вашего сообщения");
             } catch (ChatBotException | NullPointerException e) {
                 log.error("Произошло исключение при запуске колбэка", e);
