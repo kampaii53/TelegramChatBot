@@ -23,6 +23,14 @@ public class ChatServiceImpl implements ChatService {
         this.chats.put(chatId, new ChatEntity(chatId,null, LocalTime.of(9,0)));
     }
 
+    @Override
+    public void updateChat(Long chatId, LocalTime time) throws DataException {
+        if(!this.chats.containsKey(chatId)){
+            throw new DataException("Chat not registered");
+        }
+        this.chats.get(chatId).setTime(time);
+    }
+
     public void updateChat(Long chatId, String fileId) throws DataException {
         if(!this.chats.containsKey(chatId)){
             throw new DataException("Chat not registered");

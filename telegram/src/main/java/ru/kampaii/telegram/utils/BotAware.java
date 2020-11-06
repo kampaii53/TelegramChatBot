@@ -20,4 +20,8 @@ public abstract class BotAware {
 
         return this.chatBot;
     }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
 }
