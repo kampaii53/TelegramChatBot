@@ -13,6 +13,7 @@ import ru.kampaii.telegram.bots.ChatBot;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Component
@@ -41,8 +42,13 @@ public class ReadFileJob {
         LocalDateTime executionTimestamp = LocalDateTime.now();
 
         for (ChatEntity chat : chats) {
-            if (chat.getTime().getHour() == executionTimestamp.getHour()
-                    && chat.getTime().getMinute() == executionTimestamp.getMinute()) {
+            LocalTime time = chat.getTime();
+
+            if(time == null){
+                continue;
+            }
+            if (time.getHour() == executionTimestamp.getHour()
+                    && time.getMinute() == executionTimestamp.getMinute()) {
 
                 new Thread(() -> {
                     log.debug("Thread of chat {} started",chat.getId());

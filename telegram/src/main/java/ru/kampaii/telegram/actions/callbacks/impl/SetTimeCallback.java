@@ -10,6 +10,7 @@ import ru.kampaii.telegram.exceptions.ChatBotException;
 import ru.kampaii.telegram.utils.BotAware;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 
 @Component
@@ -36,7 +37,12 @@ public class SetTimeCallback extends BotAware implements CallbackExecutor {
             throw new ChatBotException("Не задан чат");
         }
 
-        LocalTime time = LocalTime.parse(update.getMessage().getText());
+        LocalTime time = null;
+        try {
+            time = LocalTime.parse(update.getMessage().getText());
+        } catch (DateTimeParseException e) {
+            throw new ChatBotException("Некорректный формат даты! Придется повторить процедуру регистрации чата в боте! Начните с удаления бота из чата");
+        }
 
         try {
             chatService.updateChat(chatId,time);
