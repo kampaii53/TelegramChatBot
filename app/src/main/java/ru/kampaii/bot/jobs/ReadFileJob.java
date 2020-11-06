@@ -51,7 +51,7 @@ public class ReadFileJob {
                     && time.getMinute() == executionTimestamp.getMinute()) {
 
                 new Thread(() -> {
-                    log.debug("Thread of chat {} started",chat.getId());
+                    log.info("Thread of chat {} started",chat.getId());
                     try {
                         List<List<Object>> values = googleSheetsService.getSheetValue(chat.getFileId());
                         for (int i = 1; i < values.size(); i++) {
@@ -63,7 +63,7 @@ public class ReadFileJob {
                     } catch (IOException e) {
                         log.error("error while read file " + chat.getFileId() + " of chat " + chat.getId(), e);
                     }
-                    log.debug("Thread of chat {} finished",chat.getId());
+                    log.info("Thread of chat {} finished",chat.getId());
                 }).start();
 
             }
