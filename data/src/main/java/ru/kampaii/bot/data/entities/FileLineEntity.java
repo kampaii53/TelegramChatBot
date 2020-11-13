@@ -29,13 +29,13 @@ public class FileLineEntity {
         this.adresate = adresate;
     }
 
-    public FileLineEntity(List<Object> values){
-        this.chat = getStringValue(values,0);
+    public FileLineEntity(List<Object> values) {
+        this.chat = getStringValue(values, 0);
         this.isContinuing = "Да".equalsIgnoreCase(getStringValue(values, 1));
-        this.executionDate = DateHelper.getDate(getStringValue(values,2));
-        this.theme = getStringValue(values,3);
-        this.message = getStringValue(values,4);
-        this.adresate = getStringValue(values,5);
+        this.executionDate = DateHelper.getDate(getStringValue(values, 2));
+        this.theme = getStringValue(values, 3);
+        this.message = getStringValue(values, 4);
+        this.adresate = getStringValue(values, 5);
     }
 
     public String getChat() {
@@ -78,15 +78,14 @@ public class FileLineEntity {
         this.message = message;
     }
 
-    public String constructMessage(){
-        return this.theme == null ? message : theme+": "+message;
+    public String constructMessage() {
+        return this.theme == null ? message : "Тема: " + theme + ":\n" + message;
     }
 
-    private String getStringValue(List<Object> object,int index){
-        try{
+    private String getStringValue(List<Object> object, int index) {
+        try {
             return object.get(index).toString();
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
             return null;
         }
     }

@@ -44,26 +44,31 @@ public class ReadFileJob {
         for (ChatEntity chat : chats) {
             LocalTime time = chat.getTime();
 
-            if(time == null){
+            if (time == null) {
                 continue;
             }
             if (time.getHour() == executionTimestamp.getHour()
                     && time.getMinute() == executionTimestamp.getMinute()) {
 
                 new Thread(() -> {
-                    log.info("Thread of chat {} started",chat.getId());
+                    log.info("Thread of chat {} started", chat.getId());
                     try {
                         List<List<Object>> values = googleSheetsService.getSheetValue(chat.getFileId());
                         for (int i = 1; i < values.size(); i++) {
                             FileLineEntity line = new FileLineEntity(values.get(i));
-                            if (executionTimestamp.toLocalDate().equals(line.getExecutionDate())) {
-                                chatBot.sendMessageToChat(chat.getId(), line.constructMessage());
+
+                            if( line.getExecutionDate().minusDays(1).equals(executionTimestamp.toLocalDate())){
+                                chatBot.sendMessageToChat(chat.getId(),"Завтра:\n" + line.constructMessage());
+                            }
+
+                            if( executionTimestamp.toLocalDate().equals(line.getExecutionDate())){
+                                chatBot.sendMessageToChat(chat.getId(),"Сегодня:\n" + line.constructMessage());
                             }
                         }
                     } catch (IOException e) {
                         log.error("error while read file " + chat.getFileId() + " of chat " + chat.getId(), e);
                     }
-                    log.info("Thread of chat {} finished",chat.getId());
+                    log.info("Thread of chat {} finished", chat.getId());
                 }).start();
 
             }
