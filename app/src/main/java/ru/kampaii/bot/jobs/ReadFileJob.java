@@ -12,6 +12,7 @@ import ru.kampaii.gdocs.services.GoogleSheetsService;
 import ru.kampaii.telegram.bots.ChatBot;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ReadFileJob {
 
         List<ChatEntity> chats = chatService.getActiveChats();
         LocalDateTime executionTimestamp = LocalDateTime.now();
+        LocalDate executionDate = executionTimestamp.toLocalDate();
 
         for (ChatEntity chat : chats) {
             LocalTime time = chat.getTime();
@@ -57,13 +59,8 @@ public class ReadFileJob {
                         for (int i = 1; i < values.size(); i++) {
                             FileLineEntity line = new FileLineEntity(values.get(i));
 
-                            if( line.getExecutionDate().minusDays(1).equals(executionTimestamp.toLocalDate())){
-                                chatBot.sendMessageToChat(chat.getId(),"Завтра:\n" + line.constructMessage());
-                            }
-
-                            if( executionTimestamp.toLocalDate().equals(line.getExecutionDate())){
-                                chatBot.sendMessageToChat(chat.getId(),"Сегодня:\n" + line.constructMessage());
-                            }
+                            trySendMessage(chat.getId(),"Завтра (",executionDate.plusDays(1),line);
+                            trySendMessage(chat.getId(),"Сегодня (",executionDate,line);
                         }
                     } catch (IOException e) {
                         log.error("error while read file " + chat.getFileId() + " of chat " + chat.getId(), e);
@@ -74,4 +71,12 @@ public class ReadFileJob {
             }
         }
     }
+
+    private void trySendMessage(Long id, String prefix, LocalDate date, FileLineEntity line) {
+        if (date.equals(line.getExecutionDate())) {
+            chatBot.sendMessageToChat(id, prefix + date.toString() + "):\n" + line.constructMessage());
+        }
+    }
+
+
 }
