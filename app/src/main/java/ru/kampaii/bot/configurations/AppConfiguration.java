@@ -1,15 +1,14 @@
 package ru.kampaii.bot.configurations;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.boot.SpringBootConfiguration;
 
-@Configuration
-@EnableWebMvc
 @Import(value = ServicesConfiguration.class)
 @EnableScheduling
 @ComponentScan(basePackages = "ru.kampaii.bot.jobs")
+@SpringBootConfiguration
 public class AppConfiguration{
+
+    public static void main(String[] args) {
+        SpringApplication.run(AppConfiguration.class, args);
+    }
 }
