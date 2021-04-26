@@ -1,15 +1,13 @@
 package ru.kampaii.bot.configurations;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Import(value = ServicesConfiguration.class)
 @EnableScheduling
-@ComponentScan(basePackages = "ru.kampaii.bot.jobs")
-@SpringBootConfiguration
+@SpringBootApplication(scanBasePackages = "ru.kampaii.bot.jobs")
 public class AppConfiguration{
 
     public static void main(String[] args) {
