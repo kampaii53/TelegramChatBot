@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.kampaii.gdocs.services.GoogleSheetsService;
 import ru.kampaii.gdocs.utils.SheetsServiceUtil;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -14,7 +15,8 @@ public class GoogleSheetsServiceImpl implements GoogleSheetsService {
 
     private static Sheets sheetsService;
 
-    public GoogleSheetsServiceImpl() throws GeneralSecurityException, IOException {
+    @PostConstruct
+    public void init() throws GeneralSecurityException, IOException {
         sheetsService = SheetsServiceUtil.getSheetsService();
     }
 

@@ -6,7 +6,7 @@ import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.SheetsScopes;
 
@@ -18,17 +18,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class GoogleAuthorizeUtil {
+
+    private static final GsonFactory FACTORY = GsonFactory.getDefaultInstance();
+    private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+
     public static Credential authorize() throws IOException, GeneralSecurityException {
         InputStream in = GoogleAuthorizeUtil.class.getResourceAsStream("/secret.json");
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JacksonFactory.getDefaultInstance(), new InputStreamReader(in));
-
-        List<String> scopes = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(FACTORY, new InputStreamReader(in));
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
-                JacksonFactory.getDefaultInstance(),
+                FACTORY,
                 clientSecrets,
-                scopes
+                SCOPES
         )
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File("tokens")))
                 .setAccessType("offline")
