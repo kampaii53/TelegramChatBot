@@ -1,6 +1,10 @@
 package ru.kampaii.bot.configurations;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Import(value = ServicesConfiguration.class)
 @EnableScheduling

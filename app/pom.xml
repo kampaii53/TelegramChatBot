@@ -9,8 +9,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <packaging>war</packaging>
 
     <artifactId>app</artifactId>
+
+    <properties>
+        <start-class></start-class>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -50,9 +55,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
-            <version>2.4.5</version>
+            <version>${boot.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
