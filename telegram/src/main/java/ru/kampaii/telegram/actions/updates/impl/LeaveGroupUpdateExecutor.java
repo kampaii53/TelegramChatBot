@@ -40,7 +40,7 @@ public class LeaveGroupUpdateExecutor extends NonCommandUpdateExecutor {
 
     @Override
     public void execute(Update update) {
-        Integer user = update.getMessage().getFrom().getId();
+        Long user = update.getMessage().getFrom().getId();
 
         Long chatId = update.getMessage().getChat().getId();
 

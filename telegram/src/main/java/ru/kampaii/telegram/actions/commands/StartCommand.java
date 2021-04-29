@@ -18,7 +18,7 @@ public class StartCommand extends AbstractCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        sendMessage(absSender,chat.getId(),"Приложение запущено");
+        sendMessage(absSender,chat.getId().toString(),"Приложение запущено");
     }
 
 }

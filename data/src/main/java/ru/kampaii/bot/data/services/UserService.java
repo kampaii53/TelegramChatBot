@@ -12,7 +12,7 @@ public interface UserService {
 
     Collection<UserEntity> getAll();
 
-    UserEntity get(Integer id);
+    UserEntity get(Long id);
 
-    boolean hasRights(Integer userId,UserRights rights);
+    boolean hasRights(Long userId,UserRights rights);
 }

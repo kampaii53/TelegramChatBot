@@ -37,13 +37,13 @@ public class AddChatUpdateExecutor extends NonCommandUpdateExecutor {
     @Override
     public boolean applies(Update update) {
         List<User> newChatMembers = update.getMessage().getNewChatMembers();
-        if(newChatMembers == null || newChatMembers.size() == 0 ) {
+        if (newChatMembers == null || newChatMembers.size() == 0) {
             return false;
         }
         try {
             User botUser = getChatBot().getMe();
             for (User newChatMember : newChatMembers) {
-                if(newChatMember.getId().equals(botUser.getId())){
+                if (newChatMember.getId().equals(botUser.getId())) {
                     return true;
                 }
             }
@@ -58,21 +58,21 @@ public class AddChatUpdateExecutor extends NonCommandUpdateExecutor {
     @Override
     public void execute(Update update) {
         Long chatId = update.getMessage().getChat().getId();
-        log.debug("Добавляемся в группу {}",chatId);
-        Integer userId = update.getMessage().getFrom().getId();
+        log.debug("Добавляемся в группу {}", chatId);
+        Long userId = update.getMessage().getFrom().getId();
         try {
             chatService.addChat(chatId);
 
-            getChatBot().sendMessageToUser(userId,BotMessages.CHAT_ADD_MESSAGE.getValue());
+            getChatBot().sendMessageToUser(userId, BotMessages.CHAT_ADD_MESSAGE.getValue());
 
-            SendMessage message = new SendMessage(userId.toString(),BotMessages.CHAT_GET_KEY.getValue() +chatId);
+            SendMessage message = new SendMessage(userId.toString(), BotMessages.CHAT_GET_KEY.getValue() + chatId);
             message.setReplyMarkup(new ForceReplyKeyboard());
             Message result = getChatBot().execute(message);
 
-            callbackService.registerCallback(Long.valueOf(message.getChatId()), result.getMessageId(), SetChatFileCallback.class, Collections.singletonMap(SetChatFileCallback.CHAT_PARAMETER,chatId));
+            callbackService.registerCallback(Long.valueOf(message.getChatId()), result.getMessageId(), SetChatFileCallback.class, Collections.singletonMap(SetChatFileCallback.CHAT_PARAMETER, chatId));
         } catch (Exception e) {
-            getChatBot().sendMessageToUser(userId,"Произошла ошибка: "+e.getMessage());
-            log.error("Не удалось подключить бота к чату",e);
+            getChatBot().sendMessageToUser(userId, "Произошла ошибка: " + e.getMessage());
+            log.error("Не удалось подключить бота к чату", e);
         }
     }
 }

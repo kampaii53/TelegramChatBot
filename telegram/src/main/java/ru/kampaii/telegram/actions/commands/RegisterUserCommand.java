@@ -36,11 +36,11 @@ public class RegisterUserCommand extends AbstractCommand {
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         //TODO вынести проверку в аннотации
         if(!userService.hasRights(user.getId(),UserRights.ADMIN)) {
-            sendMessage(absSender,chat.getId(),"Пользователь не является администратором");
+            sendMessage(absSender,chat.getId().toString(),"Пользователь не является администратором");
             return;
         }
 
-        SendMessage reply = new SendMessage(chat.getId(),"Выберите пользователя для добавления в администраторы бота");
+        SendMessage reply = new SendMessage(chat.getId().toString(),"Выберите пользователя для добавления в администраторы бота");
         reply.setReplyMarkup(new ForceReplyKeyboard());
         try {
             Message message = absSender.execute(reply);

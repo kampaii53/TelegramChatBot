@@ -4,7 +4,7 @@ import java.util.List;
 
 public class UserEntity {
 
-    private Integer id;
+    private Long id;
 
     private String username;
 
@@ -12,18 +12,18 @@ public class UserEntity {
 
     private UserRights rights;
 
-    public UserEntity(Integer id, String username, List<ChatEntity> chats, UserRights rights) {
+    public UserEntity(Long id, String username, List<ChatEntity> chats, UserRights rights) {
         this.id = id;
         this.username = username;
         this.chats = chats;
         this.rights = rights;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -13,13 +13,13 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private Map<Integer,UserEntity> users;
+    private Map<Long,UserEntity> users;
 
     public UserServiceImpl() {
-        this.users = new HashMap<Integer, UserEntity>();
+        this.users = new HashMap<Long, UserEntity>();
 
-        users.put(699917602,new UserEntity(699917602,"Kirill Kuznetsov",null,UserRights.ADMIN));
-        users.put(382798906,new UserEntity(382798906,"Sergey Grishin",null,UserRights.ADMIN));
+        users.put(699917602L,new UserEntity(699917602L,"Kirill Kuznetsov",null,UserRights.ADMIN));
+        users.put(382798906L,new UserEntity(382798906L,"Sergey Grishin",null,UserRights.ADMIN));
     }
 
     public void add(UserEntity user) throws DataException {
@@ -34,11 +34,11 @@ public class UserServiceImpl implements UserService {
         return users.values();
     }
 
-    public UserEntity get(Integer id) {
+    public UserEntity get(Long id) {
         return users.get(id);
     }
 
-    public boolean hasRights(Integer userId, UserRights rights) {
+    public boolean hasRights(Long userId, UserRights rights) {
         if(rights == null || userId == null){
             return false;
         }

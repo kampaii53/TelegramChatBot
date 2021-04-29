@@ -15,7 +15,7 @@ public abstract class AbstractCommand extends BotCommand {
         super(commandIdentifier, description);
     }
 
-    void sendMessage(AbsSender absSender, long chatId, String text) {
+    void sendMessage(AbsSender absSender, String chatId, String text) {
         try {
             absSender.execute(new SendMessage(chatId, text));
         } catch (TelegramApiException e) {

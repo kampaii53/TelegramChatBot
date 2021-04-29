@@ -65,7 +65,7 @@ public class SetChatFileCallback extends BotAware implements CallbackExecutor<Up
 
         Message message = null;
         try {
-            message = createTimeMessage(update.getMessage().getChatId());
+            message = createTimeMessage(update.getMessage().getChatId().toString());
         } catch (TelegramApiException e) {
             throw new ChatBotException(e);
         }
@@ -73,7 +73,7 @@ public class SetChatFileCallback extends BotAware implements CallbackExecutor<Up
         callbackService.registerCallback(update.getMessage().getChatId(),message.getMessageId(),SetTimeCallback.class, Collections.singletonMap(CHAT_PARAMETER,chatId));
     }
 
-    private Message createTimeMessage(Long chatId) throws TelegramApiException {
+    private Message createTimeMessage(String chatId) throws TelegramApiException {
         SendMessage message = new SendMessage(chatId,"Теперь необходимо установить время в формате ЧЧ:ММ");
         message.setReplyMarkup(new ForceReplyKeyboard());
 

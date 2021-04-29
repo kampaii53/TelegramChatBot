@@ -74,14 +74,14 @@ public class ChatBot extends TelegramLongPollingCommandBot {
     public Message sendMessageToChat(Long chatId, String message){
         try {
             log.debug("message to {} : {}",chatId,message);
-            return execute(new SendMessage(chatId, message));
+            return execute(new SendMessage(chatId.toString(), message));
         } catch (TelegramApiException e) {
             log.error("Не удалось отправить сообщение пользователю",e);
             return null;
         }
     }
 
-    public Message sendMessageToUser(Integer userId, String message){
+    public Message sendMessageToUser(Long userId, String message){
         try {
             log.debug("message to {} : {}",userId,message);
             return execute(new SendMessage(userId.toString(), message));

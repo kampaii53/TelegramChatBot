@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <telegram.bots.version>4.9.1</telegram.bots.version>
+        <telegram.bots.version>5.2.0</telegram.bots.version>
     </properties>
 
     <dependencies>

@@ -38,9 +38,9 @@ public class RegisterUserCallback extends BotAware implements CallbackExecutor<U
 
         Contact contact = update.getMessage().getContact();
 
-        if(userService.get(contact.getUserID()) == null) {
+        if(userService.get(contact.getUserId()) == null) {
             try {
-                userService.add(new UserEntity(contact.getUserID(), getUserNameFromContact(contact), new ArrayList<>(), UserRights.USER));
+                userService.add(new UserEntity(contact.getUserId(), getUserNameFromContact(contact), new ArrayList<>(), UserRights.USER));
             } catch (DataException e) {
                 throw new ChatBotException(e);
             }
